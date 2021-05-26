@@ -4,6 +4,7 @@ Remove Offensive and Profane Words from Wordlists
 # About
 `wordlist-sanitizer` will create a copy of a file appended with`-clean` that has had a specified list of bad words removed.
 If the input is a directory, `wordlist-sanitizer` will recursively create a clone of the directory (directory names also appended with `-clean`) with all files inside sanitized.
+The default bad words list came from [https://www.cs.cmu.edu/~biglou/resources/](https://www.cs.cmu.edu/~biglou/resources/) and was prrogrammatically reduced in size (by removing redundant entries)
 
 # Installation
 Ensure that Golang is installed, and the GOPATH variable is in your PATH
