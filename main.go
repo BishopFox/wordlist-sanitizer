@@ -128,12 +128,16 @@ func sanitizeList(fpath string, opath string, threads int) {
 
 			// Append -clean to each directory and filename
 			for i := 0; i < len(dirs); i++ {
-				dirs[i] = dirs[i] + "-clean"
+				if dirs[i] != "." {
+					dirs[i] = dirs[i] + "-clean"
+				}
 			}
 
 			// Create the new directory structure
-			err := os.MkdirAll(filepath.Join(dirs[:len(dirs)-1]...), os.ModePerm)
-			check(err)
+			if len(dirs) > 1 {
+				err := os.MkdirAll(filepath.Join(dirs[:len(dirs)-1]...), os.ModePerm)
+				check(err)
+			}
 
 			// Create and open the new file
 			f, err := os.Create(filepath.Join(dirs...))
