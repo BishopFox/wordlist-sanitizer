@@ -77,7 +77,7 @@ func sanitizeList(fpath string, opath string, threads int) {
 			mutex.Lock()
 			defer mutex.Unlock()
 
-			dirs := strings.Split(strings.ReplaceAll(fpath, "\\", "/"), "/")
+			dirs := strings.Split(strings.ReplaceAll(filepath.Join(opath, fpath), "\\", "/"), "/")
 
 			for i := 0; i < len(dirs); i++ {
 				dirs[i] = dirs[i] + "-clean"
@@ -129,6 +129,10 @@ func main() {
 	flag.IntVar(&threads, "threads", 100, "Concurrent worker count.")
 
 	flag.Parse()
+
+	if len(flag.Args()) > 0 {
+		inPath = strings.Join(flag.Args(), " ")
+	}
 
 	badWordsContent, err := ioutil.ReadFile(badPath)
 	check(err)
