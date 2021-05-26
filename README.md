@@ -10,7 +10,7 @@ The default bad words list came from [https://www.cs.cmu.edu/~biglou/resources/]
 Ensure that Golang is installed, and the GOPATH variable is in your PATH
 
 ```bash
-git clone https://github.com/gaberust/wordlist-sanitizer
+git clone https://github.com/BishopFox/wordlist-sanitizer
 cd wordlist-sanitizer
 ```
 
