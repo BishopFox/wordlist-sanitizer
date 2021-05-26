@@ -18,6 +18,8 @@ type Result struct {
 }
 
 var badWords []string
+var badCount uint64
+var totalWords uint64
 
 func check(e error) {
 	if e != nil {
@@ -48,6 +50,7 @@ func sanitizeList(fpath string, opath string, threads int) {
 		content, err := ioutil.ReadFile(fpath)
 		check(err)
 		words := strings.Fields(string(content))
+		totalWords += uint64(len(words))
 
 		results := make(chan string)
 		queue := make(chan string)
@@ -63,6 +66,8 @@ func sanitizeList(fpath string, opath string, threads int) {
 				for s := range queue {
 					if checkWord(s) {
 						results <- s
+					} else {
+						badCount++
 					}
 				}
 			}()
@@ -72,15 +77,15 @@ func sanitizeList(fpath string, opath string, threads int) {
 			mutex.Lock()
 			defer mutex.Unlock()
 
-			dirs := filepath.SplitList(fpath)
+			dirs := strings.Split(strings.ReplaceAll(fpath, "\\", "/"), "/")
+
 			for i := 0; i < len(dirs); i++ {
 				dirs[i] = dirs[i] + "-clean"
 			}
-			out := filepath.Join(opath, filepath.Join(dirs[:len(dirs)-1]...))
-			err := os.MkdirAll(out, os.ModePerm)
+			err := os.MkdirAll(filepath.Join(dirs[:len(dirs)-1]...), os.ModePerm)
 			check(err)
 
-			f, err := os.Create(filepath.Join(out, dirs[len(dirs)-1]))
+			f, err := os.Create(filepath.Join(dirs...))
 			check(err)
 			defer f.Close()
 
@@ -95,7 +100,6 @@ func sanitizeList(fpath string, opath string, threads int) {
 
 		for _, s := range words {
 			queue <- s
-			fmt.Println(s)
 		}
 		close(queue)
 		workerGroup.Wait()
@@ -132,4 +136,6 @@ func main() {
 	badWords = strings.Fields(string(badWordsContent))
 
 	sanitizeList(inPath, outPath, threads)
+
+	fmt.Printf("%d bad words were removed out of %d words.", badCount, totalWords)
 }
