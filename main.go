@@ -33,8 +33,9 @@ func check(e error) {
 //
 // Returns: bool (false if contains bad word, otherwise true)
 func checkWord(word string) bool {
+	lowerStr := strings.ToLower(word)
 	for _, s := range badWords {
-		if strings.Contains(word, s) {
+		if strings.Contains(lowerStr, s) {
 			return false
 		}
 	}
@@ -205,8 +206,11 @@ func main() {
 	badWordsContent, err := ioutil.ReadFile(badPath)
 	check(err)
 
-	// Split bad words into whitespace separated array (available globally)
+	// Split bad words into lowercase whitespace separated array (available globally)
 	badWords = strings.Fields(string(badWordsContent))
+	for i := 0; i < len(badWords); i++ {
+		badWords[i] = strings.ToLower(badWords[i])
+	}
 
 	// Call `sanitizeList`. If the input path is a directory, `sanitizeList` will handle the recursion internally
 	sanitizeList(inPath, outPath, threads)
