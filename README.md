@@ -9,7 +9,7 @@ If the input is a directory, `wordlist-sanitizer` will recursively create a clon
 Ensure that Golang is installed, and the GOPATH variable is in your PATH
 
 ```bash
-git clone https://github.com/BishopFox/wordlist-sanitizer
+git clone https://github.com/gaberust/wordlist-sanitizer
 cd wordlist-sanitizer
 ```
 
