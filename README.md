@@ -21,6 +21,7 @@ Windows:
 
 *nix:
 ```bash
+go mod init github.com/BishopFox/wordlist-sanitizer
 chmod +x install.sh
 ./install.sh
 ```
